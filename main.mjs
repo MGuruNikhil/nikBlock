@@ -4,6 +4,7 @@ class Block {
     constructor(index,data,previousHash='') {
         this.index = index;
         this.data = data;
+        this.nonce = 0;
         this.previousHash = previousHash;
         this.hash = this.generateHash();
     }
@@ -11,11 +12,20 @@ class Block {
     generateHash() {
         return sha256(this.index + this.previousHash + JSON.stringify(this.data)).toString();
     }
+
+    mineBlock(level) {
+        while(this.hash.substring(0,level) !== Array(level+1).join('0')) {
+            this.nonce++;
+            this.hash = this.generateHash();
+        }
+        console.log("Block is mined : " + this.hash);
+    }
 }
 
 class BlockChain {
     constructor() {
         this.chain = [this.createGenesis()];
+        this.level = 1;
     }
 
     createGenesis() {
@@ -28,7 +38,7 @@ class BlockChain {
 
     addBlock(newBlock) {
         newBlock.previousHash = this.getLastBlock().hash;
-        newBlock.hash = newBlock.generateHash();
+        newBlock.mineBlock(this.level);
         this.chain.push(newBlock);
     }
 
@@ -50,7 +60,11 @@ class BlockChain {
 }
 
 let nikBlock = new BlockChain();
+
+console.log("Mining block 1...");
 nikBlock.addBlock(new Block(1,"Nikhil"));
+
+console.log("Mining block 2...");
 nikBlock.addBlock(new Block(2,"Nischal"));
 
 console.log(JSON.stringify(nikBlock,null,4));
