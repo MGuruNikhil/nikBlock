@@ -1,4 +1,4 @@
-var SHA256 = require("crypto-js/sha256");
+import sha256 from 'crypto-js/sha256.js';
 
 class Block {
     constructor(index,data,previousHash='') {
@@ -9,7 +9,7 @@ class Block {
     }
 
     generateHash() {
-        return SHA256(this.index + this.previousHash + JSON.stringify(this.data)).toString();
+        return sha256(this.index + this.previousHash + JSON.stringify(this.data)).toString();
     }
 }
 
@@ -37,4 +37,4 @@ let nikBlock = new BlockChain();
 nikBlock.addBlock(new Block(1,"Nikhil"));
 nikBlock.addBlock(new Block(2,"Nischal"));
 
-console.log(JSON.stringify(BlockChain,null,4));
+console.log(JSON.stringify(nikBlock,null,4));
