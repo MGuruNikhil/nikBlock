@@ -10,7 +10,7 @@ class Block {
     }
 
     generateHash() {
-        return sha256(this.index + this.previousHash + JSON.stringify(this.data)).toString();
+        return sha256(this.index + this.previousHash + this.nonce + JSON.stringify(this.data)).toString();
     }
 
     mineBlock(level) {
@@ -25,7 +25,7 @@ class Block {
 class BlockChain {
     constructor() {
         this.chain = [this.createGenesis()];
-        this.level = 1;
+        this.level = 2;
     }
 
     createGenesis() {
